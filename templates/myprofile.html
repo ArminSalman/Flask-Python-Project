@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <div class="profile">
+        <br><br>
+        <div class="container">
+            <div style="width: 100%;">
+                {% if user.profilePhotoName != None %}
+                    <img style="width: 150px; height: 150px;" src="../static/img/{{user['profilePhotoName']}}" alt="userphoto">
+                    <a href="/change-profile-photo" style="margin-left: 10px;">Profil Fotoğrafı Değiştir</a>
+                {% else %}
+                    <img style="width: 150px;" src="../static/img/defaultuser.jpg" alt="defaultuser">
+                    <a href="/change-profile-photo" style="margin-left: 10px;">Profil Fotoğrafı Ayarla</a>
+                {% endif %}
+                <h2 style="margin-top: -40px; margin-left: 170px;">{{user.username}}</h2>
+                <a href="/my-account" class="btn btn-primary" style="float: right; margin-top: -40px;">Bilgilerim</a>
+            </div>
+        </div>
+    </div>
+
+{% endblock body %}

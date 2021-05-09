@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<div class="container">
+    <form method="GET">
+        <select name="rankSelect" style="width: 250px;" class="form-control">
+            {% if rankSelect == "Normal" %}
+                <p>Normal</p>
+                <option value="Normal">Normal Üye Sıralama</option>
+                <option value="Teacher">Öğretmen Üye Sıralama</option>
+            {% elif rankSelect == "Teacher" %}
+                <p>Öğretmen</p>
+                <option value="Teacher">Öğretmen Üye Sıralama</option>
+                <option value="Normal">Normal Üye Sıralama</option>
+            {% else %}
+                <option value="Normal">Normal Üye Sıralama</option>
+                <option value="Teacher">Öğretmen Üye Sıralama</option>
+            {% endif %}
+        </select>
+        <button class="btn btn-dark" style="margin-top: -6%; margin-left: 300px;">Sırala</button>
+    </form>
+
+{% if users %}
+
+    {% if userInfo and session["teacherVerify"] == 1 and rankSelect == "Teacher" %}
+        <p class="alert alert-info" style="color: black;">Kullanıcı Adınız: <b>{{session["username"]}}</b> Sıranız: <b>{{rank}}</b> Puanınız: <b>{{userInfo[4]}}</b></p>
+    {% endif %}
+    {% if userInfo and session["teacher"] == 0 and rankSelect == "Normal" %}
+        <p class="alert alert-info" style="color: black;">Kullanıcı Adınız: <b>{{session["username"]}}</b> Sıranız: <b>{{rank}}</b> Puanınız: <b>{{userInfo[4]}}</b></p>
+    {% endif %}
+    
+    <table class="table table-hover" style="position: relative; top:50px;">
+        <thead>
+            <tr>
+                <th scope="col">Sıra</th>
+                <th scope="col">Kullanıcı Adı</th>
+                {% if rankSelect == "Teacher" %}
+                    <th scope="col">Branş</th>
+                {% endif %}
+                <th scope="col">Puan</th>
+                <!-- <th scope="col"></th> -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>
+                        {% for i in range(0,lenUsers)  %}
+                            {% if users[i] == user %}
+                                {{i+1}}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td><a style="color: blue; text-decoration: none;" href="/profile/{{user[0]}}">{{user[0]}}</a></td>
+                    {% if rankSelect == "Teacher" %}
+                        <td>{{user[2]}}</td>
+                    {% endif %}
+                    <td>{{user[4]}}</td>
+                </tr> 
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+</div>
+{% endblock body %}
