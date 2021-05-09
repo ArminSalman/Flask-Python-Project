@@ -1,0 +1,80 @@
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<section class="content-item" id="comments">
+    <div class="container">   
+    	<div class="row">
+            <div class="col-sm-8">   
+                <form id="yorumekle" action="/add-comment/{{question[0]}}" method="POST">
+                	<h3 class="pull-left">Yorum Ekle</h3>
+                    <fieldset>
+                        <div class="row">
+                            <div class="col-sm-3 col-lg-2 hidden-xs">
+                            	<!--<img class="img-responsive" src="" alt=""> -->
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-9 col-lg-10">
+                                <textarea style="margin-left: -120px;" class="form-control" id="message" name = "comment" placeholder="Cevap..." required=""></textarea>
+                            </div>
+                        </div> 
+                        <button type="submit" style="margin-top: 20px; margin-right: 120px;" class="btn btn-primary pull-right">Ekle</button>
+                    </fieldset>
+                </form>
+                
+                <h3>{{commentCount}} Yorum</h3>
+                
+                <!-- COMMENT - START -->
+                {% if comments %}
+                    {% for comment in comments %}
+                        <div class="media" id="comment{{comment[0]}}">
+                            <!-- <a class="pull-left" href="#"><img class="media-object" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt=""></a> -->
+                            <div class="media-body">
+                                {% if comment[7] != None %}
+                                    <a href="/profile/{{comment[2]}}"><img style="width: 60px; height: 60px;" src="../static/img/{{comment[7]}}" alt=""></a>
+                                {% else %}
+                                <a href="/profile/{{comment[2]}}"><img style="width: 60px; height: 60px;" src="../static/img/defaultuser.jpg" alt=""></a>
+                                {% endif %}
+                                <div style="margin-left: 100px; margin-top: -45px;">
+                                    <h4 class="media-heading">{{comment[2]}}</h4>
+                                    {% if comment[2] in teachers %}
+                                        <div class="alert" style="width: 170px; margin-top: -45px; margin-left:30%; background: rgb(42, 177, 255);">
+                                            <b style="color: lightgreen; font-size: 15px;">Öğretmen Hesabı</b>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="dropdown" style="margin-top: -10%; margin-left: 90%;">
+                                    <button class="dropbtn"><img src="../static/img/altaltaucnokta.png"></button>
+                                    <div class="dropdown-content" style="margin-top: -20px;">
+                                        {% if session["username"] == comment[2] or session["admin"] %}
+                                            <a href="/update-comment/{{question[0]}}/{{comment[0]}}">Düzenle</a>
+                                            <a href="/delete-comment/{{question[0]}}/{{comment[0]}}">Kaldır</a>
+                                            {% if session["admin"] %}
+                                                <a href="/complaint-comment">Şikayet Et</a>
+                                            {% endif %}
+                                        {% else %}
+                                            <a href="/complaint-comment">Şikayet Et</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <p style="margin-top: -5%;">{{comment[1]}}</p>
+                                <ul class="list-unstyled list-inline media-detail pull-left">
+                                    <li><i class="fa fa-calendar"></i>{{comment[5]}}</li>
+                                    <li><i class="fa fa-thumbs-up"></i>{{comment[4]}}</li>
+                                </ul>
+                                <ul class="list-unstyled list-inline media-detail pull-right">
+                                    <form>
+                                        {% if comment[0] in userLikes %}
+                                        <li><a href="/like-dislike-comment/{{question[0]}}/{{comment[0]}}" id="{{comment[0]}}" style="border: 0px; background: white; margin-right: 17px;"><img style="width: 30px;" src="../static/img/liked.jpg" alt=""></a></li>
+                                        {% else %}
+                                        <li><a id="{{comment[0]}}" href="/like-dislike-comment/{{question[0]}}/{{comment[0]}}" style="border: 0px; background: white; margin-right: 17px;"><img style="width: 30px;" src="../static/img/like.jpg" alt=""></a></li>
+                                        {% endif %}
+
+                                    </form>
+                                </ul>
+                            </div>
+                        </div> 
+                    {% endfor %}
+                {% endif %}
+                <!-- COMMENT - END -->
+            
+            </div>
+        </div>
+    </div>
+</section>
